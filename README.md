@@ -32,7 +32,8 @@ git revert HEAD~1  (해당 commit만 변동없는 새 커밋으로 바꾸어줌)
 (1)git checkout dev .... git merge (--no-ff or --ff or --squash) feature...충돌난  파일수정: git add <conflicted-file>, git commit
   다 끝나면 그 브랜치 삭제도 가능 git branch -d feature  (-D), git push origin --delete feature
 (2)git checkout feature.....git fetch ..git rebase origin/dev....충돌만 파일들 수정  git add .  git rebase --continue 
-만약 포기하고 원래 상태로 되돌리려면: git rebase --abort  성공한후엔 git push -f
+성공한후엔 git push -f  or git push --force origin <branch>
+만약 포기하고 원래 상태로 되돌리려면: git rebase --abort  
 
 
 ---------------------
