@@ -59,10 +59,16 @@ gh pr list
 PR 체크아웃 (로컬로 가져오기) gh pr checkout 456
 PR 병합 gh pr merge 456  -default merge 전략으로 병합
 
+.github/workflows/ci/build.yml
+
 gh workflow list
 gh run list 최근 build/CI 실행 내역 열람
+gh run list --workflow test.yml
 gh run cancel(or rerun) 123456789
 gh workflow run "Deploy"
+gh list --workflow <..yml>
+gh run view <run.id>
+
 
 
 gh release create v1.0.0 -n "note내용" --target <branch/commit>  (v1.0.0이라는 릴리즈 Tag를 자동 생성)
@@ -80,7 +86,19 @@ git push origin v1.2.0
 git push origin --tags
 
 
+로컬 머신에 github self-hosted runner 설치하기 
+actions-runner/_work/<repo-name>/<repo-name>: 기본적으로 매번 git checkout을 수행
+./config.sh --url https://github.com/<OWNER>/<REPO> --token <TOKEN>  --name my-runner --labels mylabel
+run: | cp -r $GITHUB_WORKSPACE /home/runner/webProjects/myrepo
+cp /home/runner/secrets/.env $GITHUB_WORKSPACE/.env
+ls -la $GITHUB_WORKSPACE/.env
+GitHub Secrets에 .env 설정값들을 저장하고 workflow에서 환경변수로 주입:env:DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
+gh workflow run test.yml --ref dev -f suite=regression -f otherParam=foobar  #branch명 dev, parameter -f
+  (param은 yml에서 이렇게 사용됨: (1)선언: on: workflow_dispatch: inputs: suite:  
+    (2)사용 echo "Suite is: ${{ github.event.inputs.suite }}")
 
+github action yml
 
->>>>>>> 2a4e8c6 (updated README with git 사용법)
+- uses: actions/checkout@v4, - uses: actions/cache@v3
+

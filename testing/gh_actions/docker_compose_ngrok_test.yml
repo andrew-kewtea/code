@@ -1,0 +1,43 @@
+name: Docker Build & Ngrok Test
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  workflow_dispatch:
+
+jobs:
+  build-test-ngrok:
+    runs-on: ubuntu-latest
+
+    env:
+      NGROK_URL: ${{ secrets.NGROK_URL }}   # ngrok HTTPS 주소
+      DOCKER_COMPOSE_FILE: docker-compose.yml
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Images
+        run: |
+          docker compose -f $DOCKER_COMPOSE_FILE build
+
+      - name: Start Services
+        run: |
+          docker compose -f $DOCKER_COMPOSE_FILE up -d
+
+      - name: Wait for FastAPI Ready
+        run: |
+          sleep 10
+
+      - name: Test via Ngrok
+        run: |
+          curl -fsSL "${NGROK_URL}/health" || exit 1
+
+      - name: Tear Down
+        run: |
+          docker compose down -v

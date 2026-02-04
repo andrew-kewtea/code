@@ -1,0 +1,42 @@
+name: Docker Build & Traefik Test
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  workflow_dispatch:
+
+jobs:
+  build-test-traefik:
+    runs-on: ubuntu-latest
+
+    env:
+      TARGET_DOMAIN: "https://your-domain.example"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Compose
+        run: |
+          docker compose build
+
+      - name: Start Traefik + App
+        run: |
+          docker compose up -d
+
+      - name: Wait for Services
+        run: |
+          sleep 15
+
+      - name: Test via Traefik
+        run: |
+          curl -fsSL "${TARGET_DOMAIN}/health" || exit 1
+
+      - name: Tear Down
+        run: |
+          docker compose down -v
