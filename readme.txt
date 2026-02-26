@@ -10,7 +10,22 @@ subtree : 실제 코드를 전체 복사, 단순한 clone, 무거운 크기 증�
 repo1에서 image build
 Dockerfile 추가  image registry에 저장 (.dockerignore)
 GitHub Container Registry (GHCR)
+-------
 
+1.git clone
+2.uv sync...uv add....  uv run(python)
+3.docker build run docker compose
+  ngrok http
+4.alembic revison upgrade
+
+
+-------------------
+git clone
+git fetch origin
+git branch -a  -vv...
+A) git switch -c 2602 --track origin/2602  (= git checkout -b 2602 origin/2602)
+B) git switch -c hotfix23    git push -u origin hotfix23
+   예전방식 git checkout -b hotfix23  그리고 -u 실행
 --------------------
 uv init
 uv venv --python 3.11
